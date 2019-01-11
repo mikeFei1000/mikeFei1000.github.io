@@ -153,6 +153,97 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-最新最全的将ReactNative集成到现有原生Android应用指南(20186)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2054/05/30/最新最全的将ReactNative集成到现有原生Android应用指南(20186)/">最新最全的将ReactNative集成到现有原生Android应用指南(2018/6)</a>
+    </h1>
+  
+
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="写在一开始"><a href="#写在一开始" class="headerlink" title="写在一开始"></a>写在一开始</h1><p>为什么要写这篇文章？<br>现有的许多教程文章大多基于ReactNative中文网的，鱼龙混杂，有些甚至是照搬，在我们开始上手，总会遇到问题，而面对网上的文章千篇一律、不能帮助到我们，心情一定是着急的。所以我希望<strong>集成教程有我这一篇就够了</strong>！当你在集成过程中遇到问题时，或者你正打算开始集成的时候，我希望你能够找到这篇文章。<br>ps:我没有吐槽ReactNaive中文网，相反我相信以及认可它的权威性，它上面的大部分教程写的非常好，有很高的参考意义，有些步骤我将引用中文网，我将本着精益求精的态度写下这边文章。好了，废话就说到这里，现在，年轻人，让我们开始吧！</p>
+<h1 id="一-开发环境准备"><a href="#一-开发环境准备" class="headerlink" title="一.开发环境准备"></a>一.开发环境准备</h1><p>首先按照<a href="https://reactnative.cn/docs/0.51/getting-started.html" target="_blank" rel="noopener">开发环境搭建教程</a>来安装React Native在安卓平台上所需的一切依赖软件（比如<code>npm</code>）。</p>
+<h1 id="二-把React-Native添加到你的应用中"><a href="#二-把React-Native添加到你的应用中" class="headerlink" title="二.把React Native添加到你的应用中"></a>二.把React Native添加到你的应用中</h1><h3 id="1-设置项目目录结构"><a href="#1-设置项目目录结构" class="headerlink" title="1. 设置项目目录结构"></a>1. 设置项目目录结构</h3><p>首先创建一个空目录用于存放React Native项目，然后在其中创建一个<code>/android</code>子目录，把你现有的Android项目拷贝到<code>/android</code>子目录中。<br><img src="https://upload-images.jianshu.io/upload_images/1933841-045370547503d6bc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="项目结构"></p>
+<h3 id="2-安装JavaScript依赖包"><a href="#2-安装JavaScript依赖包" class="headerlink" title="2. 安装JavaScript依赖包"></a>2. 安装JavaScript依赖包</h3><p>在项目根目录下创建一个名为<code>package.json</code>的空文本文件，然后填入以下内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;name&quot;: &quot;MyApp&quot;,</span><br><span class="line">  &quot;version&quot;: &quot;0.0.1&quot;,</span><br><span class="line">  &quot;private&quot;: true,</span><br><span class="line">  &quot;scripts&quot;: &#123;</span><br><span class="line">    &quot;start&quot;: &quot;node node_modules/react-native/local-cli/cli.js start&quot;,</span><br><span class="line">    &quot;test&quot;: &quot;jest&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;dependencies&quot;: &#123;</span><br><span class="line">    &quot;babel-preset-react-native&quot;: &quot;^2.1.0&quot;,</span><br><span class="line">    &quot;react&quot;: &quot;16.3.1&quot;,</span><br><span class="line">    &quot;react-native&quot;: &quot;0.55.3&quot;,</span><br><span class="line">    &quot;react-navigation&quot;: &quot;^2.3.1&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;jest&quot;: &#123;</span><br><span class="line">    &quot;preset&quot;: &quot;react-native&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>要想继续了解<code>package.json</code>请移步到阮一峰大神的博客中<a href="http://javascript.ruanyifeng.com/nodejs/packagejson.html" target="_blank" rel="noopener">项目的配置信息</a></p>
+<p>接下来我们使用npm（node包管理器）来安装React和React Native模块。 请打开一个终端/命令提示行，进入到项目目录中（即包含有package.json文件的目录），然后运行下列命令来安装，这些模块会被安装到项目根目录下的node_modules/目录中:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br></pre></td></tr></table></figure></p>
+<h3 id="3-配置maven"><a href="#3-配置maven" class="headerlink" title="3.配置maven"></a>3.配置maven</h3><p>在你的app中<code>build.gradle</code>文件中添加 React Native 依赖:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">    ...</span><br><span class="line">    compile &quot;com.facebook.react:react-native:+&quot; // From node_modules.</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在项目的 <code>build.gradle</code> 文件中为 React Native 添加一个 maven 依赖的入口，必须写在 “allprojects” 代码块中:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">allprojects &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        ...</span><br><span class="line">        maven &#123;</span><br><span class="line">            // All of React Native (JS, Android binaries) is installed from npm</span><br><span class="line">            url &quot;$rootDir/../node_modules/react-native/android&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>如果maven中url有多个的写法:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">allprojects &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        jcenter()</span><br><span class="line">        maven &#123; url &quot;https://jitpack.io&quot; &#125;</span><br><span class="line">        maven &#123;</span><br><span class="line">            // All of React Native (JS, Android binaries) is installed from npm</span><br><span class="line">            url &quot;$rootDir/../node_modules/react-native/android&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="4-配置权限"><a href="#4-配置权限" class="headerlink" title="4.配置权限"></a>4.配置权限</h3><p>接着，在 <code>AndroidManifest.xml</code>清单文件中声明网络权限:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;uses-permission android:name=&quot;android.permission.INTERNET&quot; /&gt;</span><br></pre></td></tr></table></figure></p>
+<p>如果需要访问<code>DevSettingsActivity</code>界面（即开发者菜单），则还需要在 <code>AndroidManifest.xml</code>中声明:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;activity android:name=&quot;com.facebook.react.devsupport.DevSettingsActivity&quot; /&gt;</span><br></pre></td></tr></table></figure></p>
+<p><strong>如果你的应用会运行在Android 6.0（API level 23）或更高版本，需要动态去申请打开悬浮窗(overlay)权限，一般写在应用的开屏页：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">public class SplashActivity extends BaseActivity &#123;</span><br><span class="line">    @Override</span><br><span class="line">    protected void onCreate(Bundle savedInstanceState) &#123;</span><br><span class="line">        super.onCreate(savedInstanceState);</span><br><span class="line">        ....</span><br><span class="line">        if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.M) &#123;</span><br><span class="line">            if (!Settings.canDrawOverlays(this)) &#123;</span><br><span class="line">                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,</span><br><span class="line">                        Uri.parse(&quot;package:&quot; + getPackageName()));</span><br><span class="line">                startActivityForResult(intent, OVERLAY_PERMISSION_REQ_CODE);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void onActivityResult(int requestCode, int resultCode, Intent data) &#123;</span><br><span class="line">        if (requestCode == OVERLAY_PERMISSION_REQ_CODE) &#123;</span><br><span class="line">            if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.M) &#123;</span><br><span class="line">                if (!Settings.canDrawOverlays(this)) &#123;</span><br><span class="line">                    // SYSTEM_ALERT_WINDOW permission not granted...</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="三-集成RN代码"><a href="#三-集成RN代码" class="headerlink" title="三.集成RN代码"></a>三.集成RN代码</h1><h3 id="1-创建一个index-js文件"><a href="#1-创建一个index-js文件" class="headerlink" title="1. 创建一个index.js文件"></a>1. 创建一个<code>index.js</code>文件</h3><p>首先在项目根目录中创建一个空的<code>index.js</code>文件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">import &#123;AppRegistry&#125; from &apos;react-native&apos;;</span><br><span class="line">import App from &apos;./ui/App&apos;;</span><br><span class="line">import React, &#123;Component, Text&#125; from &apos;react&apos;;</span><br><span class="line">import &#123;DeviceEventEmitter&#125; from &apos;react-native&apos;;</span><br><span class="line"></span><br><span class="line">export default class Index extends Component &#123;</span><br><span class="line">    // 构造</span><br><span class="line">    constructor(props) &#123;</span><br><span class="line">        super(props);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    render() &#123;</span><br><span class="line">        return (&lt;App/&gt;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//注册组件到RN中去，使得原生可以访问到这个组件</span><br><span class="line">AppRegistry.registerComponent(&apos;NbbApp&apos;, () =&gt; Index);</span><br></pre></td></tr></table></figure></p>
+<p>本案例使用了<code>react-navigation</code>，每个页面的配置都在<code>App.js</code>类中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import &#123;StackNavigator, TabNavigator, TabBarBottom&#125; from &apos;react-navigation&apos;;</span><br><span class="line">import React, &#123;Component&#125; from &apos;react&apos;;</span><br><span class="line">import Second from &apos;./Second&apos;;</span><br><span class="line"></span><br><span class="line">const MyApp = StackNavigator(&#123;</span><br><span class="line">    //每一个页面的配置,第一个即是首页</span><br><span class="line">    Second: &#123;</span><br><span class="line">        screen: Second,</span><br><span class="line">        path: &quot;app/second&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line">const prefix = &apos;scheme://app/&apos;;</span><br><span class="line">const App = () =&gt; &lt;MyApp uriPrefix=&#123;prefix&#125;/&gt;</span><br><span class="line">export default App;</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-实现ReactApplication"><a href="#2-实现ReactApplication" class="headerlink" title="2.实现ReactApplication"></a>2.实现ReactApplication</h3><p>这步比较重要，也是中文网中没有提到的，否则会报错<br> <img src="https://upload-images.jianshu.io/upload_images/1933841-a1eb626159983946.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">public class NBBApplication extends Application implements ReactApplication &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onCreate() &#123;</span><br><span class="line">        super.onCreate();</span><br><span class="line">        SoLoader.init(this, /* native exopackage */ false);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) &#123;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public boolean getUseDeveloperSupport() &#123;</span><br><span class="line">            return BuildConfig.DEBUG;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        protected List&lt;ReactPackage&gt; getPackages() &#123;</span><br><span class="line">            return Arrays.&lt;ReactPackage&gt;asList(</span><br><span class="line">                    new MainReactPackage()</span><br><span class="line">            );</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        protected String getJSMainModuleName() &#123;</span><br><span class="line">            return &quot;index&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public ReactNativeHost getReactNativeHost() &#123;</span><br><span class="line">        return mReactNativeHost;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="3-启动RN界面"><a href="#3-启动RN界面" class="headerlink" title="3.启动RN界面"></a>3.启动RN界面</h3><p>我们还需要添加一些原生代码来启动React Native的运行时环境并让它开始渲染。<br>在0.4版本之后，RN新增了<code>ReactActivity</code>这类，不需要我们自己去实现<code>ReactRootView</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public class MyReactActivity extends ReactActivity &#123;</span><br><span class="line"></span><br><span class="line">    public static void start(Context context) &#123;</span><br><span class="line">        Intent intent = new Intent(context, MyReactActivity.class);</span><br><span class="line">        context.startActivity(intent);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Nullable</span><br><span class="line">    @Override</span><br><span class="line">    protected String getMainComponentName() &#123;</span><br><span class="line">        return &quot;NbbApp&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected ReactActivityDelegate createReactActivityDelegate() &#123;</span><br><span class="line">        return new ReactActivityDelegate(this,getMainComponentName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>现在当我们在原生应用中打开<code>MyReactActivity</code>页面，就跳转到在index.js文件中<br><code>registerComponent</code>注册过别名为<code>NbbApp</code>的RN页面。</strong></p>
+<h1 id="四-运行"><a href="#四-运行" class="headerlink" title="四.运行"></a>四.运行</h1><p><code>react-native run-android</code> 运行到android设备中。</p>
+<h1 id="五-错误集锦"><a href="#五-错误集锦" class="headerlink" title="五.错误集锦"></a>五.错误集锦</h1><blockquote>
+<p>Starting: Intent { com.awesome_project/.MainActivity }<br>Error type 3<br>Error: Activity class {com.awesome_project/ com.awesome_project.MainActivity} does not exist.</p>
+</blockquote>
+<p><strong>请将项目的<code>MainActivity</code>移动到在根目录下</strong><br><img src="https://upload-images.jianshu.io/upload_images/1933841-c5e65f599231e463.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">React Native</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2054/05/30/最新最全的将ReactNative集成到现有原生Android应用指南(20186)/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-WMS Android项目架构演进" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -251,97 +342,6 @@
 
 
   
-    <article id="post-最新最全的将ReactNative集成到现有原生Android应用指南(20186)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2054/05/30/最新最全的将ReactNative集成到现有原生Android应用指南(20186)/">最新最全的将ReactNative集成到现有原生Android应用指南(2018/6)</a>
-    </h1>
-  
-
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="写在一开始"><a href="#写在一开始" class="headerlink" title="写在一开始"></a>写在一开始</h1><p>为什么要写这篇文章？<br>现有的许多教程文章大多基于ReactNative中文网的，鱼龙混杂，有些甚至是照搬，在我们开始上手，总会遇到问题，而面对网上的文章千篇一律、不能帮助到我们，心情一定是着急的。所以我希望<strong>集成教程有我这一篇就够了</strong>！当你在集成过程中遇到问题时，或者你正打算开始集成的时候，我希望你能够找到这篇文章。<br>ps:我没有吐槽ReactNaive中文网，相反我相信以及认可它的权威性，它上面的大部分教程写的非常好，有很高的参考意义，有些步骤我将引用中文网，我将本着精益求精的态度写下这边文章。好了，废话就说到这里，现在，年轻人，让我们开始吧！</p>
-<h1 id="一-开发环境准备"><a href="#一-开发环境准备" class="headerlink" title="一.开发环境准备"></a>一.开发环境准备</h1><p>首先按照<a href="https://reactnative.cn/docs/0.51/getting-started.html" target="_blank" rel="noopener">开发环境搭建教程</a>来安装React Native在安卓平台上所需的一切依赖软件（比如<code>npm</code>）。</p>
-<h1 id="二-把React-Native添加到你的应用中"><a href="#二-把React-Native添加到你的应用中" class="headerlink" title="二.把React Native添加到你的应用中"></a>二.把React Native添加到你的应用中</h1><h3 id="1-设置项目目录结构"><a href="#1-设置项目目录结构" class="headerlink" title="1. 设置项目目录结构"></a>1. 设置项目目录结构</h3><p>首先创建一个空目录用于存放React Native项目，然后在其中创建一个<code>/android</code>子目录，把你现有的Android项目拷贝到<code>/android</code>子目录中。<br><img src="https://upload-images.jianshu.io/upload_images/1933841-045370547503d6bc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="项目结构"></p>
-<h3 id="2-安装JavaScript依赖包"><a href="#2-安装JavaScript依赖包" class="headerlink" title="2. 安装JavaScript依赖包"></a>2. 安装JavaScript依赖包</h3><p>在项目根目录下创建一个名为<code>package.json</code>的空文本文件，然后填入以下内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;name&quot;: &quot;MyApp&quot;,</span><br><span class="line">  &quot;version&quot;: &quot;0.0.1&quot;,</span><br><span class="line">  &quot;private&quot;: true,</span><br><span class="line">  &quot;scripts&quot;: &#123;</span><br><span class="line">    &quot;start&quot;: &quot;node node_modules/react-native/local-cli/cli.js start&quot;,</span><br><span class="line">    &quot;test&quot;: &quot;jest&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;dependencies&quot;: &#123;</span><br><span class="line">    &quot;babel-preset-react-native&quot;: &quot;^2.1.0&quot;,</span><br><span class="line">    &quot;react&quot;: &quot;16.3.1&quot;,</span><br><span class="line">    &quot;react-native&quot;: &quot;0.55.3&quot;,</span><br><span class="line">    &quot;react-navigation&quot;: &quot;^2.3.1&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;jest&quot;: &#123;</span><br><span class="line">    &quot;preset&quot;: &quot;react-native&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>要想继续了解<code>package.json</code>请移步到阮一峰大神的博客中<a href="http://javascript.ruanyifeng.com/nodejs/packagejson.html" target="_blank" rel="noopener">项目的配置信息</a></p>
-<p>接下来我们使用npm（node包管理器）来安装React和React Native模块。 请打开一个终端/命令提示行，进入到项目目录中（即包含有package.json文件的目录），然后运行下列命令来安装，这些模块会被安装到项目根目录下的node_modules/目录中:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br></pre></td></tr></table></figure></p>
-<h3 id="3-配置maven"><a href="#3-配置maven" class="headerlink" title="3.配置maven"></a>3.配置maven</h3><p>在你的app中<code>build.gradle</code>文件中添加 React Native 依赖:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">    ...</span><br><span class="line">    compile &quot;com.facebook.react:react-native:+&quot; // From node_modules.</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>在项目的 <code>build.gradle</code> 文件中为 React Native 添加一个 maven 依赖的入口，必须写在 “allprojects” 代码块中:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">allprojects &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        ...</span><br><span class="line">        maven &#123;</span><br><span class="line">            // All of React Native (JS, Android binaries) is installed from npm</span><br><span class="line">            url &quot;$rootDir/../node_modules/react-native/android&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><strong>如果maven中url有多个的写法:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">allprojects &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        jcenter()</span><br><span class="line">        maven &#123; url &quot;https://jitpack.io&quot; &#125;</span><br><span class="line">        maven &#123;</span><br><span class="line">            // All of React Native (JS, Android binaries) is installed from npm</span><br><span class="line">            url &quot;$rootDir/../node_modules/react-native/android&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="4-配置权限"><a href="#4-配置权限" class="headerlink" title="4.配置权限"></a>4.配置权限</h3><p>接着，在 <code>AndroidManifest.xml</code>清单文件中声明网络权限:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;uses-permission android:name=&quot;android.permission.INTERNET&quot; /&gt;</span><br></pre></td></tr></table></figure></p>
-<p>如果需要访问<code>DevSettingsActivity</code>界面（即开发者菜单），则还需要在 <code>AndroidManifest.xml</code>中声明:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;activity android:name=&quot;com.facebook.react.devsupport.DevSettingsActivity&quot; /&gt;</span><br></pre></td></tr></table></figure></p>
-<p><strong>如果你的应用会运行在Android 6.0（API level 23）或更高版本，需要动态去申请打开悬浮窗(overlay)权限，一般写在应用的开屏页：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">public class SplashActivity extends BaseActivity &#123;</span><br><span class="line">    @Override</span><br><span class="line">    protected void onCreate(Bundle savedInstanceState) &#123;</span><br><span class="line">        super.onCreate(savedInstanceState);</span><br><span class="line">        ....</span><br><span class="line">        if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.M) &#123;</span><br><span class="line">            if (!Settings.canDrawOverlays(this)) &#123;</span><br><span class="line">                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,</span><br><span class="line">                        Uri.parse(&quot;package:&quot; + getPackageName()));</span><br><span class="line">                startActivityForResult(intent, OVERLAY_PERMISSION_REQ_CODE);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void onActivityResult(int requestCode, int resultCode, Intent data) &#123;</span><br><span class="line">        if (requestCode == OVERLAY_PERMISSION_REQ_CODE) &#123;</span><br><span class="line">            if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.M) &#123;</span><br><span class="line">                if (!Settings.canDrawOverlays(this)) &#123;</span><br><span class="line">                    // SYSTEM_ALERT_WINDOW permission not granted...</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h1 id="三-集成RN代码"><a href="#三-集成RN代码" class="headerlink" title="三.集成RN代码"></a>三.集成RN代码</h1><h3 id="1-创建一个index-js文件"><a href="#1-创建一个index-js文件" class="headerlink" title="1. 创建一个index.js文件"></a>1. 创建一个<code>index.js</code>文件</h3><p>首先在项目根目录中创建一个空的<code>index.js</code>文件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">import &#123;AppRegistry&#125; from &apos;react-native&apos;;</span><br><span class="line">import App from &apos;./ui/App&apos;;</span><br><span class="line">import React, &#123;Component, Text&#125; from &apos;react&apos;;</span><br><span class="line">import &#123;DeviceEventEmitter&#125; from &apos;react-native&apos;;</span><br><span class="line"></span><br><span class="line">export default class Index extends Component &#123;</span><br><span class="line">    // 构造</span><br><span class="line">    constructor(props) &#123;</span><br><span class="line">        super(props);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    render() &#123;</span><br><span class="line">        return (&lt;App/&gt;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//注册组件到RN中去，使得原生可以访问到这个组件</span><br><span class="line">AppRegistry.registerComponent(&apos;NbbApp&apos;, () =&gt; Index);</span><br></pre></td></tr></table></figure></p>
-<p>本案例使用了<code>react-navigation</code>，每个页面的配置都在<code>App.js</code>类中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import &#123;StackNavigator, TabNavigator, TabBarBottom&#125; from &apos;react-navigation&apos;;</span><br><span class="line">import React, &#123;Component&#125; from &apos;react&apos;;</span><br><span class="line">import Second from &apos;./Second&apos;;</span><br><span class="line"></span><br><span class="line">const MyApp = StackNavigator(&#123;</span><br><span class="line">    //每一个页面的配置,第一个即是首页</span><br><span class="line">    Second: &#123;</span><br><span class="line">        screen: Second,</span><br><span class="line">        path: &quot;app/second&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line">const prefix = &apos;scheme://app/&apos;;</span><br><span class="line">const App = () =&gt; &lt;MyApp uriPrefix=&#123;prefix&#125;/&gt;</span><br><span class="line">export default App;</span><br></pre></td></tr></table></figure></p>
-<h3 id="2-实现ReactApplication"><a href="#2-实现ReactApplication" class="headerlink" title="2.实现ReactApplication"></a>2.实现ReactApplication</h3><p>这步比较重要，也是中文网中没有提到的，否则会报错<br> <img src="https://upload-images.jianshu.io/upload_images/1933841-a1eb626159983946.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">public class NBBApplication extends Application implements ReactApplication &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onCreate() &#123;</span><br><span class="line">        super.onCreate();</span><br><span class="line">        SoLoader.init(this, /* native exopackage */ false);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) &#123;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public boolean getUseDeveloperSupport() &#123;</span><br><span class="line">            return BuildConfig.DEBUG;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        protected List&lt;ReactPackage&gt; getPackages() &#123;</span><br><span class="line">            return Arrays.&lt;ReactPackage&gt;asList(</span><br><span class="line">                    new MainReactPackage()</span><br><span class="line">            );</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        protected String getJSMainModuleName() &#123;</span><br><span class="line">            return &quot;index&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public ReactNativeHost getReactNativeHost() &#123;</span><br><span class="line">        return mReactNativeHost;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="3-启动RN界面"><a href="#3-启动RN界面" class="headerlink" title="3.启动RN界面"></a>3.启动RN界面</h3><p>我们还需要添加一些原生代码来启动React Native的运行时环境并让它开始渲染。<br>在0.4版本之后，RN新增了<code>ReactActivity</code>这类，不需要我们自己去实现<code>ReactRootView</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public class MyReactActivity extends ReactActivity &#123;</span><br><span class="line"></span><br><span class="line">    public static void start(Context context) &#123;</span><br><span class="line">        Intent intent = new Intent(context, MyReactActivity.class);</span><br><span class="line">        context.startActivity(intent);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Nullable</span><br><span class="line">    @Override</span><br><span class="line">    protected String getMainComponentName() &#123;</span><br><span class="line">        return &quot;NbbApp&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected ReactActivityDelegate createReactActivityDelegate() &#123;</span><br><span class="line">        return new ReactActivityDelegate(this,getMainComponentName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><strong>现在当我们在原生应用中打开<code>MyReactActivity</code>页面，就跳转到在index.js文件中<br><code>registerComponent</code>注册过别名为<code>NbbApp</code>的RN页面。</strong></p>
-<h1 id="四-运行"><a href="#四-运行" class="headerlink" title="四.运行"></a>四.运行</h1><p><code>react-native run-android</code> 运行到android设备中。</p>
-<h1 id="五-错误集锦"><a href="#五-错误集锦" class="headerlink" title="五.错误集锦"></a>五.错误集锦</h1><blockquote>
-<p>Starting: Intent { com.awesome_project/.MainActivity }<br>Error type 3<br>Error: Activity class {com.awesome_project/ com.awesome_project.MainActivity} does not exist.</p>
-</blockquote>
-<p><strong>请将项目的<code>MainActivity</code>移动到在根目录下</strong><br><img src="https://upload-images.jianshu.io/upload_images/1933841-c5e65f599231e463.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">React Native</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2054/05/30/最新最全的将ReactNative集成到现有原生Android应用指南(20186)/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-Android调试技巧之如何在一个手机中安装多个接口地址的apk应用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -355,7 +355,7 @@
 
         
         <a href="/2018/10/26/Android调试技巧之如何在一个手机中安装多个接口地址的apk应用/" class="archive-article-date">
-  	<time datetime="2018-10-26T08:26:23.987Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-26</time>
+  	<time datetime="2018-10-26T08:27:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-26</time>
 </a>
         
       </header>
@@ -377,7 +377,7 @@
 </blockquote>
 <p>可以在你的 App icon 上加一个蒙层用以区分出各个 BuildType 的 App，所以我们需要从修改应用图标入手。<br><img src="https://upload-images.jianshu.io/upload_images/1933841-1912c07a0d845ca2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
 <p>####Setp1.准备几张带有buildtype标签的logo图</p>
-<p>####Setp2.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//利用manifestPlaceholders属性做图标的动态替换 </span><br><span class="line">        release&#123;</span><br><span class="line">            signingConfig signingConfigs.release</span><br><span class="line">            resValue &quot;string&quot;, &quot;AppName&quot;, &quot;应用预览版&quot;</span><br><span class="line">            manifestPlaceholders =[app_icon:&quot;@drawable/app_icon_test&quot;]</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure></p>
+<p>####Setp2.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//利用manifestPlaceholders属性做图标的动态替换 </span><br><span class="line">// 注意，这里是添加，在 string.xml 不能有这个字段，会重名！！！</span><br><span class="line">        release&#123;</span><br><span class="line">            signingConfig signingConfigs.release</span><br><span class="line">            resValue &quot;string&quot;, &quot;app_name&quot;, &quot;应用预览版&quot;</span><br><span class="line">            manifestPlaceholders =[app_icon:&quot;@drawable/app_icon_test&quot;]</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure></p>
 <p>####Setp3.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//将在AndroidManifest.xml中替换成引用</span><br><span class="line">    &lt;application</span><br><span class="line">        android:name=&quot;.app.MyApplication&quot;</span><br><span class="line">        android:allowBackup=&quot;true&quot;</span><br><span class="line">        android:configChanges=&quot;orientation&quot;</span><br><span class="line">        android:icon=&quot;$&#123;app_icon&#125;&quot;</span><br><span class="line">        android:label=&quot;@string/app_name&quot;</span><br><span class="line">        android:screenOrientation=&quot;portrait&quot;</span><br><span class="line">        android:supportsRtl=&quot;true&quot;</span><br><span class="line">        android:theme=&quot;@style/AppTheme.NoActionBar&quot;&gt;</span><br></pre></td></tr></table></figure></p>
 
       
@@ -445,7 +445,7 @@
 
         
         <a href="/2018/09/05/React Native 爬坑问题汇总/" class="archive-article-date">
-  	<time datetime="2018-09-05T09:15:15.286Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-05</time>
+  	<time datetime="2018-09-05T09:48:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-05</time>
 </a>
         
       </header>
@@ -536,13 +536,13 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/06/27/OkHttp3实现Cookies持续化管理/">OkHttp3实现Cookies持续化管理</a>
+      <a class="article-title" href="/2018/09/05/OkHttp3实现Cookies持续化管理/">OkHttp3实现Cookies持续化管理</a>
     </h1>
   
 
         
-        <a href="/2018/06/27/OkHttp3实现Cookies持续化管理/" class="archive-article-date">
-  	<time datetime="2018-06-27T07:03:12.159Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-06-27</time>
+        <a href="/2018/09/05/OkHttp3实现Cookies持续化管理/" class="archive-article-date">
+  	<time datetime="2018-09-05T09:34:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-05</time>
 </a>
         
       </header>
@@ -554,7 +554,7 @@
 <li>由于<strong>HTTP协议是无状态的协议</strong>，所以服务端需要记录用户的状态时，就需要用<strong>某种机制来识具体的用户</strong>，这个机制就是Session.典型的场景比如购物车，当你点击下单按钮时，由于HTTP协议无状态，所以并不知道是哪个用户操作的，所以服务端要为特定的用户创建了特定的Session，用于标识这个用户，并且跟踪用户，这样才知道购物车里面有几本书。这个<strong>Session是保存在服务端</strong>的，有一个唯一标识。在服务端保存Session的方法很多，内存、数据库、文件都有。集群的时候也要考虑Session的转移，在大型的网站，一般会有专门的Session服务器集群，用来保存用户会话，这个时候 Session 信息都是放在内存的，使用一些缓存服务比如Memcached之类的来放 Session。</li>
 <li>思考一下服务端如何识别特定的客户？这个时候Cookie就登场了。每次HTTP请求的时候，客户端都会发送相应的Cookie信息到服务端。<strong>实际上大多数的应用都是用 Cookie 来实现Session跟踪的</strong>，<strong>第一次创建Session的时候，服务端会在HTTP协议中告诉客户端，需要在 Cookie 里面记录一个Session ID，以后每次请求把这个会话ID发送到服务器，我就知道你是谁了</strong>。有人问，如果客户端的浏览器禁用了 Cookie 怎么办？一般这种情况下，会使用一种叫做URL重写的技术来进行会话跟踪，即每次HTTP交互，URL后面都会被附加上一个诸如 sid=xxxxx 这样的参数，服务端据此来识别用户。
         
-          <a class="article-more-a" href="/2018/06/27/OkHttp3实现Cookies持续化管理/#more">more >></a>
+          <a class="article-more-a" href="/2018/09/05/OkHttp3实现Cookies持续化管理/#more">more >></a>
         
       
 
@@ -578,7 +578,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2018/06/27/OkHttp3实现Cookies持续化管理/">展开全文 >></a>
+          <a class="article-more-a" href="/2018/09/05/OkHttp3实现Cookies持续化管理/">展开全文 >></a>
         </p>
       
 
@@ -621,7 +621,7 @@
 
         
         <a href="/2018/06/27/Android中Https请求如何防止中间人攻击和Charles抓包原理/" class="archive-article-date">
-  	<time datetime="2018-06-27T06:56:22.160Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-06-27</time>
+  	<time datetime="2018-06-27T07:53:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-06-27</time>
 </a>
         
       </header>
@@ -694,7 +694,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2018 Mike Fei
+    		&copy; 2019 Mike Fei
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
